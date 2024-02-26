@@ -2,36 +2,35 @@ import InputForm from "../Elements/input";
 import Button from "../Elements/Button";
 
 const FormRegfile = () => {
-    return (
-        <form action="">
-        <InputForm 
-        label="Name" 
+  return (
+    <form action="">
+      <InputForm
+        label="Name"
         type="text"
         placeholder="Insert your name here..."
-        name="fullname" 
-        />
-        <InputForm 
-        label="Email" 
+        name="fullname"
+      />
+      <InputForm
+        label="Email"
         type="email"
         placeholder="example@gmail.com"
-        name="email" 
-        />
-        <InputForm
+        name="email"
+      />
+      <InputForm
         label="Password"
         type="password"
         placeholder="********"
         name="password"
-        />
-        <InputForm
+      />
+      <InputForm
         label="Confirm Password"
         type="password"
         placeholder="********"
         name="confirmPassword"
-        />
-          <Button classname="bg-blue-600 w-full">Register</Button>
-        </form>
-    )
-}
-
+      />
+      <Button classname="bg-blue-600 w-full">Register</Button>
+    </form>
+  );
+};
 
 export default FormRegfile;
