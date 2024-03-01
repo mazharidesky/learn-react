@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import CardProduct from "../component/Fragments/CardProduct";
 import Button from "../component/Elements/Button";
 
@@ -7,7 +7,7 @@ const products = [
     id: 1,
     image: "/images/shoes-1.jpg",
     name: "Sepatu Super",
-    price: "Rp 1.000.000",
+    price: 1000000,
     description:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum dolorem, impedit neque voluptatem quam facilis amet possimus ea quis non quia sit deleniti natus eveniet iusto nostrum tenetur cumque pariatur.",
   },
@@ -15,7 +15,7 @@ const products = [
     id: 2,
     image: "/images/vandal.png",
     name: "Vandal Origin",
-    price: "Rp 500.000",
+    price: 5000000,
     description:
       "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rerum dolorem,",
   },
@@ -23,7 +23,7 @@ const products = [
     id: 3,
     image: "/images/vandal.png",
     name: "Vandal Jelek",
-    price: "Rp 500.000.000",
+    price: 10000000,
     description:
       "Vandal terjelek yang pernah ada di dunia, jangan beli ya, nanti nyesel.",
   },
@@ -31,31 +31,76 @@ const products = [
 
 const email = localStorage.getItem("email");
 
-const handleLogout = () => {
-  localStorage.removeItem("email");
-  localStorage.removeItem("password");
-  window.location.href = "/login";
-}
-
 const ProductPage = () => {
+  const [cart, setCart] = useState([
+    {
+      id: 1,
+      qty: 1,
+    },
+  ]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
+    window.location.href = "/login";
+  };
+
+  const handleAddToCart = (id) => {
+    setCart([
+      ...cart,
+      {
+        id,
+        qty: 1,
+      },
+    ]);
+  };
+
   return (
     <Fragment>
-      <div className="flex justify-end h-20 bg-slate-400 text-white px-10 items-center">
-        {email}
-        <Button classname="bg-red-500 ml-5" onClick={handleLogout}>Logout</Button>
+      <div className="flex justify-between h-20 bg-slate-400 text-white px-10 items-center">
+        <h1 className="text-xl font-bold ">Sky Commerce</h1>
+        <nav>
+          <div>
+            <ul className="flex gap-5 font-semibold text-medium">
+              <li>Home</li>
+              <li>New Product</li>
+              <li>About us</li>
+            </ul>
+          </div>
+        </nav>
+        <div>
+          {email}
+          <Button classname="bg-red-500 ml-5" onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
-    <div className="flex justify-center py-5">
-      {products.map((product) => (
-        // eslint-disable-next-line react/jsx-key
-        <CardProduct key={product.id}>
-          <CardProduct.Header image={product.image} />
-          <CardProduct.Body title={product.name}>
-            {product.description}
-          </CardProduct.Body>
-          <CardProduct.Footer price={product.price}/>
-        </CardProduct>
-      ))}
-    </div>
+      </div>
+      <div className="flex justify-center py-5">
+        <div className="w-3/4 flex flex-wrap">
+          {products.map((product) => (
+            // eslint-disable-next-line react/jsx-key
+            <CardProduct key={product.id}>
+              <CardProduct.Header image={product.image} />
+              <CardProduct.Body title={product.name}>
+                {product.description}
+              </CardProduct.Body>
+              <CardProduct.Footer
+                price={product.price}
+                id={product.id}
+                handleAddToCart={handleAddToCart}
+              />
+            </CardProduct>
+          ))}
+        </div>
+        <div className="w-1/4">
+          <h1 className="font-bold text-3xl text-blue-600">Cart</h1>
+          <ul>
+            {cart.map((item) => (
+              <li key={item}>{item.id}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </Fragment>
   );
 };
