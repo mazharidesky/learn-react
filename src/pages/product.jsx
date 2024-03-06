@@ -46,13 +46,15 @@ const ProductPage = () => {
   };
 
   const handleAddToCart = (id) => {
-    setCart([
-      ...cart,
-      {
-        id,
-        qty: 1,
-      },
-    ]);
+    if (cart.find((item) => item.id === id)) {
+      setCart(
+        cart.map((item) =>
+          item.id === id ? { ...item, qty: item.qty + 1 } : item
+        )
+      );
+    } else {
+      setCart([...cart, { id, qty: 1 }]);
+    }
   };
 
   return (
@@ -76,12 +78,12 @@ const ProductPage = () => {
         </div>
       </div>
       <div className="flex justify-center py-5">
-        <div className="w-3/4 flex flex-wrap">
+        <div className="w-4/6 flex flex-wrap">
           {products.map((product) => (
             // eslint-disable-next-line react/jsx-key
             <CardProduct key={product.id}>
               <CardProduct.Header image={product.image} />
-              <CardProduct.Body title={product.name}>
+              <CardProduct.Body name={product.name}>
                 {product.description}
               </CardProduct.Body>
               <CardProduct.Footer
@@ -92,13 +94,46 @@ const ProductPage = () => {
             </CardProduct>
           ))}
         </div>
-        <div className="w-1/4">
-          <h1 className="font-bold text-3xl text-blue-600">Cart</h1>
-          <ul>
-            {cart.map((item) => (
-              <li key={item}>{item.id}</li>
-            ))}
-          </ul>
+        <div className="w-2/6">
+          <h1 className="font-bold text-3xl text-blue-600 ml-5 mb-2">Cart</h1>
+          <table className="text-left table-auto border-separate border-spacing-x-5">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cart.map((item) => {
+                const product = products.find(
+                  (product) => product.id === item.id
+                );
+                return (
+                  // eslint-disable-next-line react/jsx-key
+                  <tr key={item.id}>
+                    <td>{product.name}</td>
+                    <td>
+                      Rp{" "}
+                      {product.price.toLocaleString("id-ID", {
+                        styles: "currency",
+                        currency: "IDR",
+                      })}
+                    </td>
+                    <td>{item.qty}</td>
+                    <td>
+                      Rp{" "}
+                      {(item.qty * product.price).toLocaleString("id-ID", {
+                        styles: "currency",
+                        currency: "IDR",
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </Fragment>
